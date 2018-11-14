@@ -1,4 +1,4 @@
-
+" 🖲
 colorscheme molokai
 syntax enable
 
