@@ -13,7 +13,7 @@ set wildignore+=*/node_modules/*
 
 colorscheme molokai
 
-"set ic
+set ic
 "set tabstop=4
 "set softtabstop=4
 "set expandtab
@@ -47,8 +47,19 @@ map <C-h> :tabn<cr>
 "set foldnestmax=10
 " space open/closes folds
 "nnoremap <space> za
+"
+"TAGS
+set tags=./tags;
+" search to tags with ctrlp
+nnoremap <leader>. :CtrlPTag<cr>
 
+" enable Ag silver searcher ---> brew install the_silver_searcher
 
+" - Avoid using standard Vim directory names like 'plugin'
+call plug#begin('~/.vim/plugged')
 
+" fzf for file searching
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
 
 
