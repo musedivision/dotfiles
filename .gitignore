@@ -1,2 +1,5 @@
 .vim/.netrwhist
 tmp/
+.vim/plugged/*
+.vim/pack/*
+.vim/bundle/*
