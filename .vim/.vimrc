@@ -71,11 +71,11 @@ nmap <Leader>hr <Plug>GitGutterUndoHunk
 map <C-n> :NERDTreeToggle<CR>
 
 " coc completion
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" inoremap <silent><expr> <TAB>
+"      \ pumvisible() ? "\<C-n>" :
+"      \ <SID>check_back_space() ? "\<TAB>" :
+"      \ coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 "webpack resolver
 autocmd FileType javascript nmap <buffer> gf <Plug>(enhanced-resolver-go-cursor)
