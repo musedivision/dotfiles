@@ -43,6 +43,12 @@ map <C-l> :tabn<cr>
 map <C-h> :tabp<cr>
 
 
+" folding
+set foldmethod=syntax 
+"set foldcolumn=1 " thing on left side of screen indicating folds
+let javaScript_fold=1 
+set foldlevelstart=99 " start file with all folds open
+
 " CtrlP Settings
 " set ctrl window bigger
 let g:ctrlp_match_window = 'min:4,max:999'
@@ -104,6 +110,7 @@ Plug 'scrooloose/nerdtree'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+Plug 'tpope/vim-cucumber'
 
 
 call plug#end()
