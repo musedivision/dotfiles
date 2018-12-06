@@ -8,7 +8,7 @@ install:
 	cp -rf .vim ~/.
 	cp .ctags ~/.
 	cp .tmux.conf ~/.
-	cp .zshrc ~/.
+#	cp .zshrc ~/.
 
 
 save:
