@@ -7,7 +7,10 @@ install:
 	cp -rf ~/.vim ./tmp/.
 	cp -rf .vim ~/.
 	cp .ctags ~/.
+	cp .tmux.conf ~/.
 
 save:
+	# its easier to ignore files with rsync
 	rsync -rv --progress  $(foreach path, $(gitignore_list), --exclude $(path)  ) ~/.vim .
 	cp ~/.ctags .
+	cp ~/.tmux.conf .
