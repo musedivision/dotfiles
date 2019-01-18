@@ -10,6 +10,9 @@ set path+=**
 
 colorscheme molokai
 
+" open split to the right
+set splitright
+
 " /searching
 set ic
 set incsearch
@@ -75,6 +78,7 @@ nmap <Leader>hr <Plug>GitGutterUndoHunk
 
 " Nerd Tree
 map <C-n> :NERDTreeToggle<CR>
+map <C-m> :NERDTreeFind<CR>
 
 " coc completion
 " inoremap <silent><expr> <TAB>
@@ -85,7 +89,11 @@ map <C-n> :NERDTreeToggle<CR>
 
 "webpack resolver
 autocmd FileType javascript nmap <buffer> gf <Plug>(enhanced-resolver-go-cursor)
-nnoremap <C-f> :Ag  
+nnoremap <C-f> :Ag <cr>
+
+"GOYO no distraction MODE quick key 
+nnoremap <Leader>dd :Goyo <cr>
+nnoremap <Leader>do :Goyo! <cr>
 
 " enable Ag silver searcher ---> brew install the_silver_searcher
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
@@ -111,7 +119,8 @@ Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 Plug 'tpope/vim-cucumber'
-
+Plug 'ruanyl/coverage.vim'
+Plug 'junegunn/goyo.vim'
 
 call plug#end()
 

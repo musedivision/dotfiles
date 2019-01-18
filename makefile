@@ -1,5 +1,13 @@
 SHELL:=/bin/bash
 
+# i
+# quite a hard process, what is the master for dotfiles. 
+# is it your most used?
+# Should you endeavour to 
+# 
+
+
+
 gitignore_list := $(shell cat .gitignore | sed -e 's/.vim\///g' | tr '\n' ' ') 
 
 install:
