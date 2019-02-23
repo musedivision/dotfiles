@@ -6,9 +6,15 @@ set nocompatible
 syntax enable
 filetype plugin on
 
+set t_Co=256
+" for vim 8
+" if (has("termguicolors"))
+"   set termguicolors
+" endif
+
 set path+=**  
 
-colorscheme molokai
+colorscheme OceanicNext 
 
 " open split to the right
 set splitright
@@ -98,30 +104,52 @@ nnoremap <Leader>do :Goyo! <cr>
 " enable Ag silver searcher ---> brew install the_silver_searcher
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
+" COMMENT LINES
+vmap <Leader>c <C-I># <CR>
 
 set path=.,src,node_modules
 set suffixesadd=.js,.jsx
 
+" fucking clipboard
+set guioptions+=a
+
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.vim/plugged')
+
+" add Intellisence YouCompleteMe
+" Start autocompletion after 4 chars
+let g:ycm_min_num_of_chars_for_completion = 4
+let g:ycm_min_num_identifier_candidate_chars = 4
+let g:ycm_enable_diagnostic_highlighting = 0
+
+" Don't show YCM's preview window [ I find it really annoying ]
+set completeopt-=preview
+let g:ycm_add_preview_to_completeopt = 0
+
+" js syntax highlighting
+let g:used_javascript_libs = 'react,ramda,chai'
 
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'davidosomething/vim-enhanced-resolver', { 'do': 'npm install --global enhanced-resolve-cli' }
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-cucumber'
 Plug 'tpope/vim-surround'
-Plug 'pangloss/vim-javascript'
+Plug 'airblade/vim-gitgutter'
+"Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'w0rp/ale'
 Plug 'scrooloose/nerdtree'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
-Plug 'tpope/vim-cucumber'
+"Plug 'neoclide/coc.nvim', {'do': { -> coc#util#build()}} 
 Plug 'ruanyl/coverage.vim'
 Plug 'junegunn/goyo.vim'
+"Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
+Plug 'mhartington/oceanic-next'
+Plug 'othree/yajs.vim'
+Plug 'othree/javascript-libraries-syntax.vim'
 
 call plug#end()
 
