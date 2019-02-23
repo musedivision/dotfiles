@@ -6,13 +6,13 @@ SHELL:=/bin/bash
 # Should you endeavour to 
 # 
 
-
+EMOJI:=$(shell node emoji.js)
 
 gitignore_list := $(shell cat .gitignore | sed -e 's/.vim\///g' | tr '\n' ' ') 
 
 sync:
 	git add .
-	git commit -m "😎"
+	git commit -m "${EMOJI}"
 	git push
 
 diff:

@@ -3,3 +3,4 @@ tmp/
 .vim/plugged/*
 .vim/pack/*
 .vim/bundle/*
+node_modules/

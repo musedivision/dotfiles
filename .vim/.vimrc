@@ -129,6 +129,20 @@ let g:ycm_add_preview_to_completeopt = 0
 " js syntax highlighting
 let g:used_javascript_libs = 'react,ramda,chai'
 
+" match tag always
+let g:mta_filetypes ={
+  \ 'javascript.jsx' : 1,
+  \}
+highlight MatchTag ctermfg=black ctermbg=lightgreen guifg=black guibg=lightgreen
+
+
+" Trigger configuration (Optional)
+let g:UltiSnipsExpandTrigger="<C-l>"
+
+let g:NERDCustomDelimiters={
+  \ 'javascript': { 'left': '//', 'right': '', 'leftAlt': '{/*', 'rightAlt': '*/}' },
+  \}
+
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'davidosomething/vim-enhanced-resolver', { 'do': 'npm install --global enhanced-resolve-cli' }
 Plug 'vim-airline/vim-airline'
@@ -150,7 +164,19 @@ Plug 'junegunn/goyo.vim'
 Plug 'mhartington/oceanic-next'
 Plug 'othree/yajs.vim'
 Plug 'othree/javascript-libraries-syntax.vim'
+Plug 'Valloric/MatchTagAlways'
+" ES2015 code snippets (Optional)
+Plug 'epilande/vim-es2015-snippets'
 
+" React code snippets
+Plug 'epilande/vim-react-snippets'
+
+" Ultisnips
+Plug 'SirVer/ultisnips'
+
+
+"
+Plug 'scrooloose/nerdcommenter'
 call plug#end()
 
 
