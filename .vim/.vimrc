@@ -86,6 +86,12 @@ nmap <Leader>hr <Plug>GitGutterUndoHunk
 map <C-n> :NERDTreeToggle<CR>
 map <C-m> :NERDTreeFind<CR>
 
+
+" Quit and save fast
+nnoremap <Leader>q :q <cr>
+nnoremap <Leader>w :w <cr>
+
+
 " coc completion
 " inoremap <silent><expr> <TAB>
 "      \ pumvisible() ? "\<C-n>" :
@@ -105,7 +111,7 @@ nnoremap <Leader>do :Goyo! <cr>
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
 " COMMENT LINES
-vmap <Leader>c <C-I># <CR>
+"vmap <Leader>c <C-I># <CR>
 
 set path=.,src,node_modules
 set suffixesadd=.js,.jsx
@@ -173,7 +179,10 @@ Plug 'epilande/vim-react-snippets'
 
 " Ultisnips
 Plug 'SirVer/ultisnips'
-
+" js auto pretty
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 
 "
 Plug 'scrooloose/nerdcommenter'
