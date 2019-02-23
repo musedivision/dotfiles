@@ -10,6 +10,11 @@ SHELL:=/bin/bash
 
 gitignore_list := $(shell cat .gitignore | sed -e 's/.vim\///g' | tr '\n' ' ') 
 
+sync:
+	git add .
+	git commit -m "😎"
+	git push
+
 diff:
 	git diff --no-index ~/.vim ./.vim
 
