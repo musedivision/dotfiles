@@ -1,0 +1,22 @@
+{
+  "name": "dotfiles",
+  "version": "1.0.0",
+  "description": "",
+  "main": "emoji.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/musedivision/dotfiles.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/musedivision/dotfiles/issues"
+  },
+  "homepage": "https://github.com/musedivision/dotfiles#readme",
+  "dependencies": {
+    "random-unicode-emoji": "^1.0.1"
+  }
+}
