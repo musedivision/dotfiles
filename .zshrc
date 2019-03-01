@@ -60,3 +60,5 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # RUBY
 export PATH=$PATH:~/.gem/ruby/2.3.0/bin
+
+alias decode="echo $1 | base64 --decode | pbcopy"

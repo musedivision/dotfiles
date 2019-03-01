@@ -86,11 +86,15 @@ nmap <Leader>hr <Plug>GitGutterUndoHunk
 map <C-n> :NERDTreeToggle<CR>
 map <C-m> :NERDTreeFind<CR>
 
-
+" MINE
 " Quit and save fast
 nnoremap <Leader>q :q <cr>
 nnoremap <Leader>w :w <cr>
 
+" find word
+nnoremap <Leader>f yiw /<C-r>"
+nnoremap <Leader>, :noh <cr>
+nnoremap <Leader>r yiw :%s/<C-r>"/
 
 " coc completion
 " inoremap <silent><expr> <TAB>
