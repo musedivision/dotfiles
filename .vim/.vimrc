@@ -147,7 +147,11 @@ highlight MatchTag ctermfg=black ctermbg=lightgreen guifg=black guibg=lightgreen
 
 
 " Trigger configuration (Optional)
-let g:UltiSnipsExpandTrigger="<C-l>"
+" let g:UltiSnipsExpandTrigger="<C-l>"
+" Set ultisnips triggers
+let g:UltiSnipsExpandTrigger="<tab>"                                            
+let g:UltiSnipsJumpForwardTrigger="<tab>"                                       
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"     
 
 let g:NERDCustomDelimiters={
   \ 'javascript': { 'left': '//', 'right': '', 'leftAlt': '{/*', 'rightAlt': '*/}' },

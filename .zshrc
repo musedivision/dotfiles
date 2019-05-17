@@ -52,6 +52,7 @@ alias tls="tmux list-sessions"
 alias tk="tmux kill-session -t"
 alias dps="docker ps"
 
+
 # FZF and Ag 
 # # Setting ag as the default source for fzf
 export FZF_DEFAULT_COMMAND='ag -g ""'
@@ -61,4 +62,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # RUBY
 export PATH=$PATH:~/.gem/ruby/2.3.0/bin
 
-alias decode="echo $1 | base64 --decode | pbcopy"
+# GOLANG
+export GOPATH="$HOME/go"
+
+
