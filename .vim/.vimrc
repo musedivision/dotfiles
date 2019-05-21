@@ -96,6 +96,9 @@ nnoremap <Leader>f yiw /<C-r>"
 nnoremap <Leader>, :noh <cr>
 nnoremap <Leader>r yiw :%s/<C-r>"/
 
+" Copy to clipboard
+map <Leader>y :w !pbcopy<CR><CR> 
+
 " coc completion
 " inoremap <silent><expr> <TAB>
 "      \ pumvisible() ? "\<C-n>" :
