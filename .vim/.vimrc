@@ -1,31 +1,52 @@
+" ─────────────────────────────────────────────────────────────
+"  .vimrc  —  leader is \  ·  plugins: vim-plug (:PlugInstall)
+" ─────────────────────────────────────────────────────────────
 
 " enter the current millenium
 set nocompatible
+set encoding=utf-8
+set backspace=indent,eol,start
+set hidden                      " keep buffers around when switching
+set autoread                    " reload files changed outside vim
+set ttyfast
+set lazyredraw
 
-" enable syntax and filetype plugin
 syntax enable
-filetype plugin on
+filetype plugin indent on
 
+" ── colours ──────────────────────────────────────────────────
 set t_Co=256
-" for vim 8
-" if (has("termguicolors"))
-"   set termguicolors
-" endif
+if has('termguicolors') && $COLORTERM =~# 'truecolor\|24bit'
+  set termguicolors
+endif
+silent! colorscheme OceanicNext
 
-set path+=**  
+" ── files / search paths ─────────────────────────────────────
+set path=.,src,node_modules,**
+set suffixesadd=.js,.jsx,.ts,.tsx
+set tags=./tags;
 
-colorscheme OceanicNext 
+" ── keep the working tree clean ──────────────────────────────
+set undofile
+set undodir=~/.vim/tmp/undo//
+set directory=~/.vim/tmp/swap//
+set backupdir=~/.vim/tmp/backup//
+for s:dir in [&undodir, &directory, &backupdir]
+  if !isdirectory(expand(s:dir)) | call mkdir(expand(s:dir), 'p', 0700) | endif
+endfor
 
-" open split to the right
+" ── splits ───────────────────────────────────────────────────
 set splitright
+set splitbelow
 
-" /searching
-set ic
+" ── searching ────────────────────────────────────────────────
+set ignorecase
+set smartcase                   " ...unless the pattern has capitals
 set incsearch
 set hlsearch
 set showmatch
 
-" tabs etc
+" ── tabs etc ─────────────────────────────────────────────────
 set tabstop=2
 set softtabstop=2
 set expandtab
@@ -33,170 +54,173 @@ set shiftwidth=2
 
 set number
 set showcmd
-
 set cursorline
+set scrolloff=3
+set signcolumn=yes              " stop gitgutter jiggling the text
 
-
-" scrll with mouse
+" scroll with mouse
 set mouse=a
 
 " wildmenu is :<command> <Tab> completion
 set wildmenu
 set wildmode=longest:list,full
-set wildignore+=*/node_modules/*
+set wildignore+=*/node_modules/*,*/.git/*,*/dist/*,*/build/*
 
-" map tabs swtiching to vim style naviagtion etc
+" ── tab switching, vim style ─────────────────────────────────
 map <C-t><up> :tabr<cr>
 map <C-t><down> :tabl<cr>
 map <C-l> :tabn<cr>
 map <C-h> :tabp<cr>
 
+" ── folding ──────────────────────────────────────────────────
+set foldmethod=syntax
+let javaScript_fold=1
+set foldlevelstart=99           " start with all folds open
 
-" folding
-set foldmethod=syntax 
-"set foldcolumn=1 " thing on left side of screen indicating folds
-let javaScript_fold=1 
-set foldlevelstart=99 " start file with all folds open
-
-" CtrlP Settings
-" set ctrl window bigger
-let g:ctrlp_match_window = 'min:4,max:999'
-nnoremap <leader>. :CtrlPTag<cr>
-
-"TAGS
-set tags=./tags;
-" search to tags with ctrlp
+" ── fuzzy finding (replaces CtrlP) ──────────────────────────
+nnoremap <C-p> :Files<cr>
+nnoremap <leader>. :Tags<cr>
+nnoremap <leader>b :Buffers<cr>
 
 " keep cursor in middle of screen when moving around
 nnoremap k kzz
 nnoremap j jzz
 
-" vim jsx work on .js
-let g:jsx_ext_required = 0
+" vim-gitgutter — revert a hunk
+nmap <Leader>hr <Plug>(GitGutterUndoHunk)
 
-"nnoremap <C-F>f <Plug>CtrlSFPrompt 
-"nnoremap <C-F>n <Plug>CtrlSFCwordPath
-"nnoremap <C-F>p <Plug>CtrlSFPwordPath
-
-" vim-gitgutter
-" git gutter revert a hunk
-nmap <Leader>hr <Plug>GitGutterUndoHunk
-
-" Nerd Tree
+" ── NERDTree ─────────────────────────────────────────────────
 map <C-n> :NERDTreeToggle<CR>
 map <C-m> :NERDTreeFind<CR>
 
-" MINE
-" Quit and save fast
-nnoremap <Leader>q :q <cr>
-nnoremap <Leader>w :w <cr>
+" ── MINE ─────────────────────────────────────────────────────
+" quit and save fast
+nnoremap <Leader>q :q<cr>
+nnoremap <Leader>w :w<cr>
 
-" find word
+" find word under cursor / clear highlight / replace word under cursor
 nnoremap <Leader>f yiw /<C-r>"
-nnoremap <Leader>, :noh <cr>
+nnoremap <Leader>, :noh<cr>
 nnoremap <Leader>r yiw :%s/<C-r>"/
 
-" Copy to clipboard
-map <Leader>y :w !pbcopy<CR><CR> 
+" ── copy to the system clipboard ─────────────────────────────
+" picks the best available route: vim's own +clipboard, then a
+" local cli tool, then OSC52 — an escape sequence that carries the
+" yank out through tmux/ssh to whatever terminal you're really on.
+function! s:ClipCmd() abort
+  if executable('pbcopy')
+    return 'pbcopy'
+  elseif executable('wl-copy') && !empty($WAYLAND_DISPLAY)
+    return 'wl-copy'
+  elseif executable('xclip') && !empty($DISPLAY)
+    return 'xclip -selection clipboard'
+  endif
+  return ''
+endfunction
 
-" coc completion
-" inoremap <silent><expr> <TAB>
-"      \ pumvisible() ? "\<C-n>" :
-"      \ <SID>check_back_space() ? "\<TAB>" :
-"      \ coc#refresh()
-" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+function! s:Clip(text) abort
+  if has('clipboard')
+    let @+ = a:text
+  else
+    let l:cmd = s:ClipCmd()
+    if !empty(l:cmd)
+      call system(l:cmd, a:text)
+    else
+      " OSC52. tmux forwards this on thanks to `set -g set-clipboard on`
+      let l:b64 = substitute(system('base64 | tr -d "\n"', a:text), '\n', '', 'g')
+      call writefile(["\e]52;c;" . l:b64 . "\x07"], '/dev/stderr', 'b')
+      redraw!
+    endif
+  endif
+  echo 'copied ' . len(a:text) . ' bytes'
+endfunction
 
-"webpack resolver
-autocmd FileType javascript nmap <buffer> gf <Plug>(enhanced-resolver-go-cursor)
-nnoremap <C-f> :Ag <cr>
+vnoremap <silent> <Leader>y y:call <SID>Clip(@")<CR>
+nnoremap <silent> <Leader>y yy:call <SID>Clip(@")<CR>
+nnoremap <silent> <Leader>Y y$:call <SID>Clip(@")<CR>
+" ── project-wide search: ripgrep, falling back to ag ─────────
+if executable('rg')
+  set grepprg=rg\ --vimgrep\ --smart-case
+  command! -bang -nargs=* Find call fzf#vim#grep(
+        \ 'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>),
+        \ 1, fzf#vim#with_preview(), <bang>0)
+elseif executable('ag')
+  set grepprg=ag\ --vimgrep
+  command! -bang -nargs=* Find call fzf#vim#ag(<q-args>,
+        \ {'options': '--delimiter : --nth 4..'}, <bang>0)
+else
+  command! -nargs=+ Find grep! <args> | copen
+endif
+command! -bang -nargs=* Ag Find<bang> <args>
+nnoremap <C-f> :Find<space>
 
-"GOYO no distraction MODE quick key 
-nnoremap <Leader>dd :Goyo <cr>
-nnoremap <Leader>do :Goyo! <cr>
-
-" enable Ag silver searcher ---> brew install the_silver_searcher
-command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
-
-" COMMENT LINES
-"vmap <Leader>c <C-I># <CR>
-
-set path=.,src,node_modules
-set suffixesadd=.js,.jsx
+" GOYO no-distraction mode
+nnoremap <Leader>dd :Goyo<cr>
+nnoremap <Leader>do :Goyo!<cr>
 
 " fucking clipboard
 set guioptions+=a
 
-" - Avoid using standard Vim directory names like 'plugin'
-call plug#begin('~/.vim/plugged')
+" ─────────────────────────────────────────────────────────────
+"  plugins
+"  - avoid using standard Vim directory names like 'plugin'
+" ─────────────────────────────────────────────────────────────
 
-" add Intellisence YouCompleteMe
-" Start autocompletion after 4 chars
-let g:ycm_min_num_of_chars_for_completion = 4
-let g:ycm_min_num_identifier_candidate_chars = 4
-let g:ycm_enable_diagnostic_highlighting = 0
+" auto-install vim-plug if it's missing
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
-" Don't show YCM's preview window [ I find it really annoying ]
-set completeopt-=preview
-let g:ycm_add_preview_to_completeopt = 0
-
-" js syntax highlighting
-let g:used_javascript_libs = 'react,ramda,chai'
-
-" match tag always
-let g:mta_filetypes ={
-  \ 'javascript.jsx' : 1,
+" ── ALE: lint as you type, format on demand with \p ─────────
+let g:ale_fixers = {
+  \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+  \ 'javascript': ['prettier', 'eslint'],
+  \ 'typescript': ['prettier', 'eslint'],
+  \ 'javascriptreact': ['prettier', 'eslint'],
+  \ 'typescriptreact': ['prettier', 'eslint'],
+  \ 'json': ['prettier'],
+  \ 'css': ['prettier'],
+  \ 'scss': ['prettier'],
+  \ 'html': ['prettier'],
+  \ 'yaml': ['prettier'],
+  \ 'markdown': ['prettier'],
   \}
-highlight MatchTag ctermfg=black ctermbg=lightgreen guifg=black guibg=lightgreen
+let g:ale_fix_on_save = 0
+nnoremap <Leader>p :ALEFix<cr>
+nmap <silent> [w <Plug>(ale_previous_wrap)
+nmap <silent> ]w <Plug>(ale_next_wrap)
 
-
-" Trigger configuration (Optional)
-" let g:UltiSnipsExpandTrigger="<C-l>"
-" Set ultisnips triggers
-let g:UltiSnipsExpandTrigger="<tab>"                                            
-let g:UltiSnipsJumpForwardTrigger="<tab>"                                       
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"     
-
-let g:NERDCustomDelimiters={
+let g:NERDCustomDelimiters = {
   \ 'javascript': { 'left': '//', 'right': '', 'leftAlt': '{/*', 'rightAlt': '*/}' },
   \}
 
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'davidosomething/vim-enhanced-resolver', { 'do': 'npm install --global enhanced-resolve-cli' }
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-cucumber'
-Plug 'tpope/vim-surround'
-Plug 'airblade/vim-gitgutter'
-"Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
-Plug 'w0rp/ale'
-Plug 'scrooloose/nerdtree'
-Plug '/usr/local/opt/fzf'
+call plug#begin('~/.vim/plugged')
+
+" finding things
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-"Plug 'neoclide/coc.nvim', {'do': { -> coc#util#build()}} 
-Plug 'ruanyl/coverage.vim'
-Plug 'junegunn/goyo.vim'
-"Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
-Plug 'mhartington/oceanic-next'
-Plug 'othree/yajs.vim'
-Plug 'othree/javascript-libraries-syntax.vim'
-Plug 'Valloric/MatchTagAlways'
-" ES2015 code snippets (Optional)
-Plug 'epilande/vim-es2015-snippets'
+Plug 'scrooloose/nerdtree'
 
-" React code snippets
-Plug 'epilande/vim-react-snippets'
+" git
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 
-" Ultisnips
-Plug 'SirVer/ultisnips'
-" js auto pretty
-Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
-
-"
+" editing
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
 Plug 'scrooloose/nerdcommenter'
+
+" lint + format (handles prettier, so no separate plugin for it)
+Plug 'dense-analysis/ale'
+
+" looks
+Plug 'mhartington/oceanic-next'
+Plug 'vim-airline/vim-airline'
+Plug 'junegunn/goyo.vim'
+
 call plug#end()
 
-
+" colorscheme again, now that the plugin providing it is on the runtimepath
+silent! colorscheme OceanicNext

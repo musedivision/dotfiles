@@ -1,6 +1,7 @@
 .vim/.netrwhist
-tmp/
-.vim/plugged/*
-.vim/pack/*
-.vim/bundle/*
+.vim/bundle/
+.vim/pack/
+.vim/plugged/
+.vim/tmp/
 node_modules/
+tmp/
